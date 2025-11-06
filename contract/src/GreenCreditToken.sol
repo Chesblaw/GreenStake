@@ -20,7 +20,11 @@ contract GreenCreditToken is ERC20, Ownable {
     event CreditRetired(address indexed from, uint256 amount, string projectId);
 
     constructor(address initialOwner) ERC20("GreenStake Carbon Credit", "GSTK") Ownable(initialOwner) {}
+mapping(address => bool) public oracles;
 
+function setOracle(address _oracle, bool _status) external onlyOwner {
+    oracles[_oracle] = _status;
+}
     /// @notice Mint verified carbon credits
     function mint(
         address to,
@@ -40,4 +44,26 @@ contract GreenCreditToken is ERC20, Ownable {
         _burn(msg.sender, amount);
         emit CreditRetired(msg.sender, amount, projectId);
     }
+
+    /**
+ * @notice Update metadata for a token (e.g., after oracle verification)
+ * @param tokenId Token ID to update
+ * @param ipfsHash New IPFS hash of the verification
+ * @param projectId Project ID
+ * @param certificateId Certificate ID
+ */
+function updateMetadata(
+    uint256 tokenId,
+    string memory ipfsHash,
+    string memory projectId,
+    string memory certificateId
+) external onlyOwner {
+    require(tokenId < nextTokenId, "Token does not exist");
+
+    creditData[tokenId] = CreditMetadata({
+        ipfsHash: ipfsHash,
+        projectId: projectId,
+        certificateId: certificateId
+    });
+}
 }
