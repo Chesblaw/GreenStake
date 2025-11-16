@@ -69,4 +69,17 @@ npm install
 
 cp .env.example .env.local```
 ```
+### Deployment
+#### 1. Start Local Blockchain (Anvil)
+Anvil spins up a local Ethereum RPC endpoint.
+```
+anvil
+```
+#### 2. Deploy Smart Contracts
+```
+forge script script/DeployGreenStake.s.sol \
+  --rpc-url http://localhost:8545 \
+  --private-key <ANVIL_PRIVATE_KEY> \
+  --broadcast -vvv
+```
 ---
