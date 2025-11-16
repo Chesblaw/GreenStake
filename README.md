@@ -1,11 +1,11 @@
 ## 🌱 GreenStake
 
-GreenStake is a tokenized carbon offset and ESG (Environmental, Social, Governance) tracking platform that enables companies to prove and verify their sustainability commitments on-chain. Built on Polygon and Solana, GreenStake transforms verified carbon credits into digital tokens, allowing businesses to transparently track, trade, and retire their offsets — eliminating greenwashing through immutable, verifiable records.
+Carbon offset projects today lack transparency and verifiable tracking, making it hard for individuals and businesses to trust or participate. Manual processes, fragmented data, and limited accessibility create inefficiencies and barriers to engagement.
 
-By integrating Chainlink oracles for real-world certification data and IPFS + The Graph for decentralized storage and indexing, GreenStake bridges the gap between sustainability reporting and blockchain transparency.
+### Description
+GreenStake introduces a blockchain-based carbon credit ecosystem with smart contracts, oracles, and decentralized storage. It enables verifiable issuance, transfer, and retirement of carbon credits, providing transparent, real-time tracking while making sustainable participation accessible to everyone.
 
 ---
-
 ## ✨ Key Features
 
 - **Tokenized Carbon Credits (ERC-20 / SPL):** Digitally represent verified carbon offset units with metadata (origin, verification body, certification type).
@@ -17,7 +17,7 @@ By integrating Chainlink oracles for real-world certification data and IPFS + Th
 - **Decentralized Storage:** IPFS for document proofs (certificates, project metadata) + The Graph for queryable ESG data indexing.
 
 ---
-### 🧩 Tech Stack
+## 🧩 Tech Stack
 | Layer             | Technologies                                 |
 | ----------------- | -------------------------------------------- |
 | **Smart Contracts:**      | Solidity, OpenZeppelin |
@@ -29,6 +29,41 @@ By integrating Chainlink oracles for real-world certification data and IPFS + Th
 
 ---
 
+## 🔄 System Architecture
+```mermaid
+flowchart TD
+    subgraph Blockchain_Layer
+        A[GreenCreditToken NFT] -->|Mint/Issue| B[Carbon Credit Project]
+        C[OffsetRetirement] -->|Retire Credits| B
+        D[GreenStakeDAO] -->|Governance Voting| B
+        E[Chainlink Oracles] -->|Project Verification & Metadata| B
+    end
+
+    subgraph Backend_Layer
+        F[API Layer] --> G[Auth & User Management]
+        F --> H[Analytics & Reporting]
+        F --> I[Notifications & Events]
+        F --> J[IPFS Storage Integration]
+        F --> K[Blockchain Interaction Module]
+    end
+
+    subgraph Frontend_Layer
+        L[User Dashboard] --> F
+        M[Project Management UI] --> F
+        N[Retirement UI] --> F
+        O[DAO Voting Interface] --> F
+    end
+
+    subgraph External_Services
+        P[IPFS] -->|Store Metadata| J
+        Q[The Graph] -->|Index On-Chain Data| H
+    end
+
+    %% Connections
+    B --> K
+    F --> K
+
+```
 ## 🏗️ Project Structure
 
 ```
