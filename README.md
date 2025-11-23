@@ -17,6 +17,27 @@ GreenStake introduces a blockchain-based carbon credit ecosystem with smart cont
 - **Decentralized Storage:** IPFS for document proofs (certificates, project metadata) + The Graph for queryable ESG data indexing.
 
 ---
+
+### How It Works
+
+1. **Carbon Credit Issuance**
+   - Verified projects mint carbon credits as NFTs via `GreenCreditToken`.
+   - Each token represents a verifiable carbon offset.
+
+2. **Oracle Verification**
+   - Chainlink oracles feed project data to smart contracts.
+   - Ensures legitimacy and accurate metadata.
+
+3. **Credit Retirement**
+   - Users and organizations retire credits on-chain via `OffsetRetirement`.
+   - Reduces total supply and logs impact transparently.
+
+4. **DAO Governance**
+   - Token holders vote on proposals, funding, and project approvals.
+   - The ecosystem is community-driven.
+
+---
+
 ## 🧩 Tech Stack
 | Layer             | Technologies                                 |
 | ----------------- | -------------------------------------------- |
