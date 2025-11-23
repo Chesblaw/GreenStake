@@ -1,98 +1,146 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+### Description
+The GreenStake backend is built using NestJS, Prisma ORM, and PostgreSQL, with integrated modules for interacting with deployed smart contracts on Ethereum-compatible chains. It exposes RESTful and GraphQL APIs that allow applications to:
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+- Issue, query, and track tokenized carbon credits
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- Process carbon credit retirements
 
-## Description
+- Fetch verified data from oracles
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Interact with the GreenStakeDAO
 
-## Project setup
+- Manage users, sessions, organization accounts, and reporting
 
-```bash
-$ pnpm install
+---
+## ✨ Key Features
+
+- **User Authentication & Role Management:** Digitally represent verified carbon offset units with metadata (origin, verification body, certification type).
+- **Carbon Credit APIs:** Issue credits (from trusted issuers), Query balances, List projects + metadata
+- **Blockchain Integration:** Read/write with deployed GreenStake smart contracts, Index contract events into PostgreSQL, Ethers.js provider and signer setup.
+- **ESG Analytics APIs:** Real-time sustainability metrics, Retired credits by category
+- **Oracle Bridge Integration:** Fetch oracle-fed project metadata.
+- **Oracles for Data Integrity:** Chainlink oracles fetch data from carbon certification providers (Verra, Gold Standard, UNFCCC).
+- **DAO Governance APIs:** Create proposals, Vote on proposals, Fetch DAO history / results.
+
+---
+
+### How It Works
+
+1. **Carbon Credit Issuance**
+   - Verified projects mint carbon credits as NFTs via `GreenCreditToken`.
+   - Each token represents a verifiable carbon offset.
+
+2. **Oracle Verification**
+   - Chainlink oracles feed project data to smart contracts.
+   - Ensures legitimacy and accurate metadata.
+
+3. **Credit Retirement**
+   - Users and organizations retire credits on-chain via `OffsetRetirement`.
+   - Reduces total supply and logs impact transparently.
+
+4. **DAO Governance**
+   - Token holders vote on proposals, funding, and project approvals.
+   - The ecosystem is community-driven.
+
+---
+
+## 🔄 Architecture
+```mermaid
+flowchart TD
+    C[Frontend] --> A[API Gateway]
+
+    subgraph Backend
+        A --> B1[Auth Module]
+        A --> B2[Credit Module]
+        A --> B3[Retirement Module]
+        A --> B4[DAO Module]
+        A --> B5[Oracle Module]
+        A --> B6[Analytics Module]
+
+        B2 --> C1[Blockchain Service]
+        B3 --> C1
+        B4 --> C1
+        B5 --> C1
+
+        C1 --> D1[Smart Contracts]
+        A --> D2[Prisma ORM]
+    end
+
+    D2 --> E[(PostgreSQL DB)]
+    D1 --> F[( Anvil )]
+
+```
+## 🏗️ Project Structure
+
+```
+backend/
+├── src/
+│   ├── app.module.ts             # Root application module
+│   ├── app.controller.ts         # Base controller
+│   ├── app.service.ts            # Base service
+│   ├── blockchain/
+│   │   ├── blockchain.module.ts  # Smart contract integration
+│   │   ├── blockchain.service.ts
+│   │   └── contract-bindings/    # typechain generated files
+│   ├── credits/
+│   │   ├── credits.controller.ts 
+│   │   ├── credits.service.ts
+│   │   └── dto/
+│   ├── retirement/
+│   │   ├── retirement.controller.ts
+│   │   ├── retirement.service.ts
+│   ├── dao/
+│   │   ├── dao.controller.ts
+│   │   ├── dao.service.ts
+│   ├── oracle/
+│   │   ├── oracle.controller.ts
+│   │   ├── oracle.service.ts
+│   ├── analytics/
+│   │   ├── analytics.controller.ts
+│   │   ├── analytics.service.ts
+│   ├── prisma/
+│   │   ├── prisma.service.ts
+│   └── common/
+│       ├── dto/
+│       ├── guards/
+│       ├── interceptors/
+│       └── utils/
+│
+├── test/                         # E2E tests (Jest)
+├── prisma/
+│   ├── schema.prisma             # Database schema
+│   └── migrations/
+│
+├── package.json
+├── tsconfig.json
+├── nest-cli.json
+├── .env.example
+└── README.md
+
 ```
 
-## Compile and run the project
+---
+
+## 🚀 Quick Start
+
+### Install Dependencies:
 
 ```bash
-# development
-$ pnpm run start
+git clone https://github.com/YOUR_USERNAME/greenstake-backend.git
+cd backend
+pnpm install
 
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+cp .env.example .env
 ```
-
-## Run tests
-
-```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+### Run Database
 ```
+docker run -d --name pg -p 5432:5432 -e POSTGRES_PASSWORD=postgres postgres
+pnpm prisma migrate dev
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
 ```
+#### Start Server
+```
+pnpm run start:dev
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```
+---
